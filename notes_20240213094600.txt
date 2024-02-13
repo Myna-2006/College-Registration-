@@ -1,0 +1,139 @@
+02.13 9:43 AM
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+// Structure to represent a user entry
+struct User {
+    char Name[50];
+    char Email[50];
+    int Age;
+    char DateOfBirth[15];
+    char Gender[10];
+    char ContactNumber[11];
+    bool EligibleForFirstGraduate;
+    int MarkScoredInSSLC;
+    int MarkScoredinHSLC;
+    char FathersName[50];
+    char MothersName[50];
+};
+
+// Function to create a new user entry
+void createUser(struct User *userList, int *userCount) {
+    struct User newUser;
+
+    // Taking input for each field
+    printf("Enter Name: ");
+    scanf("%s", newUser.Name);
+    
+    printf("Enter Email: ");
+    scanf("%s", newUser.Email);
+    
+    printf("Enter Date of Birth: ");
+    scanf("%s", newUser.DateOfBirth);
+
+    printf("Enter Gender: ");
+    scanf("%s", newUser.Gender);
+
+    printf("Enter Contact Number: ");
+    scanf("%s", newUser.ContactNumber);
+
+    // Validate contact number
+    while (strlen(newUser.ContactNumber) != 10) {
+        printf("Invalid Contact Number! Please enter 10 digits: ");
+        scanf("%s", newUser.ContactNumber);
+    }
+
+    printf("Enter Eligibility for First Graduate (1 for yes, 0 for no): ");
+    scanf("%d", &newUser.EligibleForFirstGraduate);
+
+    printf("Enter Mark Scored in SSLC: ");
+    scanf("%d", &newUser.MarkScoredInSSLC);
+
+    // Validate Mark Scored in SSLC
+    while (newUser.MarkScoredInSSLC <= 200 || newUser.MarkScoredInSSLC >= 500) {
+        printf("Invalid Mark! Please enter a value between 201 and 499: ");
+        scanf("%d", &newUser.MarkScoredInSSLC);
+    }
+
+    printf("Enter Mark Scored in HSLC: ");
+    scanf("%d", &newUser.MarkScoredinHSLC);
+
+    // Validate Mark Scored in HSLC
+    while (newUser.MarkScoredinHSLC <= 240 || newUser.MarkScoredinHSLC >= 600) {
+        printf("Invalid Mark! Please enter a value between 241 and 599: ");
+        scanf("%d", &newUser.MarkScoredinHSLC);
+    }
+
+    printf("Enter Father's Name: ");
+    scanf("%s", newUser.FathersName);
+
+    printf("Enter Mother's Name: ");
+    scanf("%s", newUser.MothersName);
+
+    // Automatically populate age (assuming current year is 2024)
+    newUser.Age = 2024 - atoi(newUser.DateOfBirth + 6);
+
+    // Add the new user to the list
+    userList[*userCount] = newUser;
+    (*userCount)++;
+
+    printf("User entry created successfully!\n");
+}
+
+// Function to list all user entries
+void listAllEntries(const struct User *userList, int userCount) {
+    if (userCount == 0) {
+        printf("No entries available.\n");
+        return;
+    }
+
+    printf("List of all entries:\n");
+    for (int i = 0; i < userCount; ++i) {
+        printf("Entry %d:\n", i + 1);
+        printf("Name: %s\n", userList[i].Name);
+        printf("Email: %s\n", userList[i].Email);
+        printf("Age: %d\n", userList[i].Age);
+        printf("Date of Birth: %s\n", userList[i].DateOfBirth);
+        printf("Gender: %s\n", userList[i].Gender);
+        printf("Contact Number: %s\n", userList[i].ContactNumber);
+        printf("Eligible for First Graduate: %s\n", userList[i].EligibleForFirstGraduate ? "Yes" : "No");
+        printf("Mark Scored in SSLC: %d\n", userList[i].MarkScoredInSSLC);
+        printf("Mark Scored in HSLC: %d\n", userList[i].MarkScoredinHSLC);
+        printf("Father's Name: %s\n", userList[i].FathersName);
+        printf("Mother's Name: %s\n", userList[i].MothersName);
+        printf("\n");
+    }
+}
+
+int main() {
+    struct User userList[100];  // Assuming a maximum of 100 entries
+    int userCount = 0;
+
+    int choice;
+    do {
+        // Display menu options
+        printf("\nMenu:\n");
+        printf("1. Create new entry\n");
+        printf("2. List all entries\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                createUser(userList, &userCount);
+                break;
+            case 2:
+                listAllEntries(userList, userCount);
+                break;
+            case 0:
+                printf("Exiting program. Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 0);
+
+    return 0;
+}
